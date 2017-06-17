@@ -27,7 +27,6 @@ if (file_exists($configFile . '.yml')) {
 $loader = new Loader();
 $loader->registerNamespaces(array(
     'MyApp\Controllers\Api'   => APP_DIR . '/controllers/api/',
-    'MyApp\Controllers\Admin' => APP_DIR . '/controllers/admin/',
     'MyApp\Controllers'       => APP_DIR . '/controllers/',
     'MyApp\Models'            => APP_DIR . '/models/',
     'MyApp\Services'          => APP_DIR . '/services/',

@@ -34,7 +34,7 @@ $router->add(
 );
 
 
-// 多应用路由    Matches "/123/news/show/1"
+// 多应用路由 Matches "/123/news/show/1"
 $router->add(
     "/([0-9]+)/:controller/:action/:params",
     array(
@@ -45,6 +45,7 @@ $router->add(
         'params'     => 4
     )
 );
+
 $router->add(
     "/([0-9]+)/:controller",
     array(
@@ -78,34 +79,6 @@ $router->add(
     '/api',
     array(
         'namespace'  => 'MyApp\Controllers\Api',
-        'controller' => 'Index'
-    )
-);
-
-
-// 后台路由
-$router->add(
-    '/admin/:controller/:action/:params',
-    array(
-        'namespace'  => 'MyApp\Controllers\Admin',
-        'controller' => 1,
-        'action'     => 2,
-        'params'     => 3
-    )
-);
-
-$router->add(
-    '/admin/:controller',
-    array(
-        'namespace'  => 'MyApp\Controllers\Admin',
-        'controller' => 1
-    )
-);
-
-$router->add(
-    '/admin',
-    array(
-        'namespace'  => 'MyApp\Controllers\Admin',
         'controller' => 'Index'
     )
 );

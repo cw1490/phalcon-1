@@ -7,8 +7,8 @@
  * Link:    http://www.xxtime.com
  */
 
-if (!function_exists('debug')) {
-    function debug()
+if (!function_exists('dd')) {
+    function dd()
     {
         echo "<meta charset='UTF-8'><pre style='padding:20px; background: #000000; color: #FFFFFF;'>\r\n";
         if (func_num_args()) {
@@ -26,10 +26,9 @@ if (!function_exists('debug')) {
 if (!function_exists('writeLog')) {
     function writeLog($log = '', $file = 'logs.txt')
     {
-        global $config;
         $log_file = APP_DIR . '/logs/' . $file;
         $handle = fopen($log_file, "a+b");
-        $text = date('Y-m-d H:i:s') . ' ' . $log . "\r\n";
+        $text = date('Y-m-d H:i:s O') . ' ' . $log . "\r\n";
         fwrite($handle, $text);
         fclose($handle);
     }

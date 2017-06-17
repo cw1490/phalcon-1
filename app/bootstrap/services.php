@@ -129,20 +129,6 @@ $di->set('dbData', function () use ($di) {
 }, true);
 
 
-$di->set('dbBackend', function () use ($di) {
-    $connection = new DbAdapter(array(
-        'host'     => $di['config']->db_backend->host,
-        'port'     => $di['config']->db_data->port,
-        'username' => $di['config']->db_backend->username,
-        'password' => $di['config']->db_backend->password,
-        'dbname'   => $di['config']->db_backend->dbname,
-        'charset'  => $di['config']->db_backend->charset
-    ));
-    $connection->setEventsManager($di['eventsManager']);
-    return $connection;
-}, true);
-
-
 $di->set('dbLog', function () use ($di) {
     $connection = new DbAdapter(array(
         'host'     => $di['config']->db_log->host,
@@ -162,7 +148,7 @@ $di->set('dbLog', function () use ($di) {
 $di['eventsManager']->attach('db', function ($event, $connection) use ($di) {
     if ($event->getType() == 'beforeQuery') {
         if ($di['config']->setting->sql_log) {
-            $logger = new FileLogger(APP_DIR . '/logs/' . "logsSql.log");
+            $logger = new FileLogger(APP_DIR . '/logs/' . "sql.log");
             $logger->log($connection->getSQLStatement());
         }
         if (preg_match('/drop|alter/i', $connection->getSQLStatement())) {
