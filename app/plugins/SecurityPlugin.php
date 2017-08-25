@@ -74,12 +74,13 @@ class SecurityPlugin extends Plugin
 
 
         // 资源
-        if ($this->config->setting->security_plugin == 1) {
+        if ($this->config->setting->security == 1) {
             // 使用自己的权限控制
             $authModel = new Auth();
             $privateResources = $authModel->getAclFormat($authModel->getResources($user_id, $app));
             $allResources = $authModel->getAclFormat($authModel->getResources(1000, $app));
-        } else {
+        }
+        else {
             // 使用资源中心的权限控制
             $resources = $this->session->get('resources');
             if (!$resources) {
@@ -144,7 +145,8 @@ class SecurityPlugin extends Plugin
         if ($namespaceName != 'MyApp\Controllers') {
             $prefix = strtolower(substr($namespaceName, strrpos($namespaceName, '\\') + 1));
             $controller = $prefix . '/' . $dispatcher->getControllerName();
-        } else {
+        }
+        else {
             $controller = $dispatcher->getControllerName();
         }
         $action = $dispatcher->getActionName();
@@ -159,7 +161,8 @@ class SecurityPlugin extends Plugin
         $user_id = $this->session->get('user_id');
         if (!isset($user_id)) {
             $role = 'Guests';
-        } else {
+        }
+        else {
             $role = 'Users';
         }
 

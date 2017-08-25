@@ -41,14 +41,14 @@ class ControllerBase extends Controller
 
 
         // record request
-        if ($this->config->setting->request_log) {
+        if ($this->config->setting->logs) {
             if (!isset($_REQUEST['_url'])) {
                 $_REQUEST['_url'] = '/';
             }
             $_url = $_REQUEST['_url'];
             unset($_REQUEST['_url']);
             $log = empty($_REQUEST) ? $_url : ($_url . '?' . urldecode(http_build_query($_REQUEST)));
-            $logger = new FileLogger(APP_DIR . '/logs/' . date("Ym") . '.log');
+            $logger = new FileLogger(APP_DIR . '/logs/' . date('Ym'));
             $logger->log($log, Logger::INFO);
         }
 
