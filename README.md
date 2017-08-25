@@ -1,6 +1,5 @@
 ## 说明
-[Phalcon相关文档](http://docs.phalconphp.com/zh/latest/index.html)
-
+[Phalcon相关文档](https://docs.phalconphp.com/zh/3.2)
 
 ## 所需环境
 * PHP >= 5.5
@@ -8,12 +7,7 @@
 
 
 ## 使用方法
-*首次安装调试时,需要将配置目录下.system.ini 修改为system.ini*
-
-* security_plugin = 0 不启权限控制
-* security_plugin = 1 使用此系统自带的RBAC权限控制
-* security_plugin = 2 使用权限控制中心的权限控制
-* 配置文件中db_backend为后端RBAC使用的数据库配置
+* 首次安装调试时,需要将配置目录下.app.yml 修改为app.yml
 * Demo文件位置examples, 分别为模型文件Demo, 控制器文件Demo
 
 
