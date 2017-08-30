@@ -9,7 +9,7 @@ use Symfony\Component\Yaml\Yaml;
 
 // load composer
 if (!file_exists(BASE_DIR . '/vendor/autoload.php')) {
-    die('The project needs Composer, please check vendor directory');
+    die('The project needs Composer, run command: composer install');
 }
 include_once BASE_DIR . '/vendor/autoload.php';
 

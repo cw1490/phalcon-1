@@ -47,7 +47,7 @@ $di->set('crypt', function () use ($di) {
 
 $di->set('url', function () use ($di) {
     $url = new UrlResolver();
-    $url->setBaseUri('/api/');
+    $url->setBaseUri('/');
     return $url;
 }, true);
 
