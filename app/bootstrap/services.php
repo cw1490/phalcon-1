@@ -18,25 +18,20 @@ use Phalcon\DI\FactoryDefault,
     MyApp\Plugins\SecurityPlugin;
 
 
-//$di = new Phalcon\Di();
 $di = new FactoryDefault();
-
 
 $di->set('config', function () use ($config) {
     return $config;
 }, true);
-
 
 $di->set('logger', function () use ($config) {
     $logger = new FileLogger(APP_DIR . '/logs/' . date('Ymd'));
     return $logger;
 }, true);
 
-
 $di->set('router', function () {
     return require __DIR__ . '/routes.php';
 }, true);
-
 
 $di->set('crypt', function () use ($di) {
     $crypt = new Crypt();
@@ -44,13 +39,11 @@ $di->set('crypt', function () use ($di) {
     return $crypt;
 }, true);
 
-
 $di->set('url', function () use ($di) {
     $url = new UrlResolver();
     $url->setBaseUri('/');
     return $url;
 }, true);
-
 
 $di->set('view', function () use ($di) {
     $view = new View();
@@ -69,16 +62,12 @@ $di->set('view', function () use ($di) {
     return $view;
 }, true);
 
-
 $di->set('modelsMetadata', function () {
     return new MetaDataAdapter();
 }, true);
 
-
-// link https://docs.phalconphp.com/zh/latest/reference/cache.html
 $di->set('modelsCache', function () use ($di) {
     $frontCache = new FrontData(array("lifetime" => $di['config']->setting->cacheTime));
-    // Redis Cache
     if (isset($di['config']->redis)) {
         $cache = new BackRedis($frontCache, array(
             'prefix' => $di['config']->redis->prefix,
@@ -88,12 +77,9 @@ $di->set('modelsCache', function () use ($di) {
         ));
         return $cache;
     }
-    // File Cache
-    $cache = new BackFile($frontCache,
-        array('prefix' => 'cache_', 'cacheDir' => APP_DIR . '/cache/'));
+    $cache = new BackFile($frontCache, array('prefix' => 'cache_', 'cacheDir' => APP_DIR . '/cache/'));
     return $cache;
 }, true);
-
 
 $di->set('session', function () {
     $session = new SessionAdapter();
@@ -101,8 +87,6 @@ $di->set('session', function () {
     return $session;
 }, true);
 
-
-// Dispatcher
 $di->set('dispatcher', function () use ($di) {
     $dispatcher = new Dispatcher();
     $dispatcher->setDefaultNamespace('MyApp\Controllers');
@@ -113,8 +97,6 @@ $di->set('dispatcher', function () use ($di) {
     return $dispatcher;
 }, true);
 
-
-// Database connection
 $di->set('dbData', function () use ($di) {
     $connection = new DbAdapter(array(
         'host'     => $di['config']->dbData->host,
@@ -127,7 +109,6 @@ $di->set('dbData', function () use ($di) {
     $connection->setEventsManager($di['eventsManager']);
     return $connection;
 }, true);
-
 
 $di->set('dbLog', function () use ($di) {
     $connection = new DbAdapter(array(
@@ -142,9 +123,6 @@ $di->set('dbLog', function () use ($di) {
     return $connection;
 }, true);
 
-
-// Database Event
-// https://docs.phalconphp.com/zh/latest/reference/dispatching.html#dispatch-loop-events
 $di['eventsManager']->attach('db', function ($event, $connection) use ($di) {
     if ($event->getType() == 'beforeQuery') {
         if ($di['config']->setting->logs) {

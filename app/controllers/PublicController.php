@@ -31,8 +31,7 @@ class PublicController extends Controller
 
     public function show401Action()
     {
-        $this->view->message = 'Error 401, No Permission';
-        $this->view->pick("public/errors");
+        $this->view->pick("public/show401");
     }
 
 

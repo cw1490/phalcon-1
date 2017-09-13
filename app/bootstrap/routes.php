@@ -4,8 +4,6 @@
  * Author:  joe@xxtime.com
  * Date:    2015-07-20
  * Time:    下午10:32
- * Link:    http://www.xxtime.com
- * link:    http://docs.phalconphp.com/zh/latest/reference/routing.html
  */
 use Phalcon\Mvc\Router;
 

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @link:   https://github.com/phalcon/mvc
- * @link:   https://docs.phalconphp.com/zh/latest/index.html
- */
-
 use Phalcon\Mvc\Application;
 
 define('BASE_DIR', dirname(__DIR__));

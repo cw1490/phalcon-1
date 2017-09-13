@@ -36,7 +36,7 @@ class SecurityPlugin extends Plugin
     }
 
 
-    private function getAcl($dispatcher)
+    protected function getAcl($dispatcher)
     {
         if (isset($this->persistent->acl)) {
             return $this->persistent->acl;
@@ -76,9 +76,15 @@ class SecurityPlugin extends Plugin
         // 资源
         if ($this->config->setting->security == 1) {
             // 使用自己的权限控制
-            $authModel = new Auth();
-            $privateResources = $authModel->getAclFormat($authModel->getResources($user_id, $app));
-            $allResources = $authModel->getAclFormat($authModel->getResources(1000, $app));
+            if (!class_exists('Auth')) {
+                $privateResources = [];
+                $allResources = [];
+            }
+            else {
+                $authModel = new Auth();
+                $privateResources = $authModel->getAclFormat($authModel->getResources($user_id, $app));
+                $allResources = $authModel->getAclFormat($authModel->getResources(1000, $app));
+            }
         }
         else {
             // 使用资源中心的权限控制
@@ -139,7 +145,7 @@ class SecurityPlugin extends Plugin
     }
 
 
-    private function checkPermission(Event $event, Dispatcher $dispatcher)
+    protected function checkPermission(Event $event, Dispatcher $dispatcher)
     {
         $namespaceName = $dispatcher->getNamespaceName();
         if ($namespaceName != 'MyApp\Controllers') {
@@ -176,6 +182,8 @@ class SecurityPlugin extends Plugin
             ]);
             return false;
         }
+
+        return true;
     }
 
 }
