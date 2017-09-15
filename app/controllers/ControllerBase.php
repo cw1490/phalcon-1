@@ -48,7 +48,7 @@ class ControllerBase extends Controller
             $_url = $_REQUEST['_url'];
             unset($_REQUEST['_url']);
             $log = empty($_REQUEST) ? $_url : ($_url . '?' . urldecode(http_build_query($_REQUEST)));
-            $logger = new FileLogger(APP_DIR . '/logs/' . date('Ym'));
+            $logger = new FileLogger(BASE_DIR . '/running/logs/' . date('Ym'));
             $logger->log($log, Logger::INFO);
         }
 

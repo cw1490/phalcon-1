@@ -6,31 +6,22 @@
  * @link: https://docs.phalconphp.com
  * @link: https://github.com/phalcon/mvc
  */
-
 use Phalcon\Loader;
-use Phalcon\Config;
-use Phalcon\Config\Adapter\Ini;
-use Symfony\Component\Yaml\Yaml;
+use Phalcon\Mvc\Application;
 
 
 // load composer
 if (!file_exists(BASE_DIR . '/vendor/autoload.php')) {
-    die('The project needs composer, run command: composer install');
+    die('Run Command: composer install');
 }
 include_once BASE_DIR . '/vendor/autoload.php';
 
 
-// load config file
-$configFile = APP_DIR . "/config/app";
-if (file_exists($configFile . '.yml')) {
-    $config = new Config(Yaml::parse(file_get_contents($configFile . '.yml')));
-}
-else {
-    $config = new Ini($configFile . '.ini');
-}
+// load services
+include APP_DIR . "/bootstrap/services.php";
 
 
-// loader
+// register namespace
 $loader = new Loader();
 $loader->registerNamespaces(array(
     'MyApp\Controllers\Api' => APP_DIR . '/controllers/api/',
@@ -42,12 +33,8 @@ $loader->registerNamespaces(array(
 ))->register();
 
 
-// load common files
-include APP_DIR . '/plugins/' . 'Common.php';
-
-
-// sandbox
-switch ($config->setting->sandbox) {
+// setting
+switch ($di['config']->setting->sandbox) {
     case true:
         include APP_DIR . '/plugins/' . 'Exception.php';
         error_reporting(E_ALL);
@@ -56,3 +43,7 @@ switch ($config->setting->sandbox) {
         header_remove('X-Powered-By');
         error_reporting(0);
 }
+
+
+$application = new Application($di);
+echo $application->handle()->getContent();

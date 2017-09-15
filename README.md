@@ -1,14 +1,16 @@
 ## 说明
-[Phalcon相关文档](https://docs.phalconphp.com/zh/3.2)
+[Phalcon相关文档](https://docs.phalconphp.com)
+
 
 ## 所需环境
 * PHP >= 5.5
+* PHP Yaml 拓展
 * composer
 
 
 ## 使用方法
 * 首次安装调试时,需要将配置目录下.app.yml 修改为app.yml
-* Demo文件位置examples, 分别为模型文件Demo, 控制器文件Demo
+* 文档在docs目录下
 
 
 ## 可能用到的组件
