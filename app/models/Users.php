@@ -12,8 +12,8 @@ class Users extends Model
 
     public function initialize()
     {
-        $this->setConnectionService('dbData');
-        $this->setSource("users");
+        $this->setConnectionService('data');
+        $this->setSource("accounts");
     }
 
 }

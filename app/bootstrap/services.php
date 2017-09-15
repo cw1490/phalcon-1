@@ -120,29 +120,17 @@ $di['eventsManager']->attach('db', function ($event, $connection) use ($di) {
 });
 
 
-$di->set('dbData', function () use ($di) {
-    $connection = new DbAdapter(array(
-        'host'     => $di['config']->dbData->host,
-        'port'     => $di['config']->dbData->port,
-        'username' => $di['config']->dbData->username,
-        'password' => $di['config']->dbData->password,
-        'dbname'   => $di['config']->dbData->dbname,
-        'charset'  => $di['config']->dbData->charset
-    ));
-    $connection->setEventsManager($di['eventsManager']);
-    return $connection;
-}, true);
-
-
-$di->set('dbLog', function () use ($di) {
-    $connection = new DbAdapter(array(
-        'host'     => $di['config']->dbLog->host,
-        'port'     => $di['config']->dbLog->port,
-        'username' => $di['config']->dbLog->username,
-        'password' => $di['config']->dbLog->password,
-        'dbname'   => $di['config']->dbLog->dbname,
-        'charset'  => $di['config']->dbLog->charset
-    ));
-    $connection->setEventsManager($di['eventsManager']);
-    return $connection;
-}, true);
+foreach ($di['config']['database'] as $db => $value) {
+    $di->set($db, function () use ($di, $value) {
+        $connection = new DbAdapter(array(
+            'host'     => $value['host'],
+            'port'     => $value['port'],
+            'username' => $value['user'],
+            'password' => $value['pass'],
+            'dbname'   => $value['db'],
+            'charset'  => $value['charset']
+        ));
+        $connection->setEventsManager($di['eventsManager']);
+        return $connection;
+    }, true);
+}
