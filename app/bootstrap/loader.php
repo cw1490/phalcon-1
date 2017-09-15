@@ -10,18 +10,20 @@ use Phalcon\Loader;
 use Phalcon\Mvc\Application;
 
 
-// load composer
 if (!file_exists(BASE_DIR . '/vendor/autoload.php')) {
     die('Run Command: composer install');
 }
+
+
 include_once BASE_DIR . '/vendor/autoload.php';
 
 
-// load services
 include APP_DIR . "/bootstrap/services.php";
 
 
-// register namespace
+include APP_DIR . "/bootstrap/setting.php";
+
+
 $loader = new Loader();
 $loader->registerNamespaces(array(
     'MyApp\Controllers\Api' => APP_DIR . '/controllers/api/',
@@ -31,18 +33,6 @@ $loader->registerNamespaces(array(
     'MyApp\Plugins'         => APP_DIR . '/plugins/',
     'MyApp\Libraries'       => APP_DIR . '/libraries/',
 ))->register();
-
-
-// setting
-switch ($di['config']->setting->sandbox) {
-    case true:
-        include APP_DIR . '/plugins/' . 'Exception.php';
-        error_reporting(E_ALL);
-        break;
-    default:
-        header_remove('X-Powered-By');
-        error_reporting(0);
-}
 
 
 $application = new Application($di);

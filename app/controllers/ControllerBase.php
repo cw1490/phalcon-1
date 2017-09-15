@@ -6,8 +6,6 @@ namespace MyApp\Controllers;
 
 use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\Dispatcher;
-use Phalcon\Logger\Adapter\File as FileLogger;
-use Phalcon\Logger;
 
 class ControllerBase extends Controller
 {
@@ -35,23 +33,6 @@ class ControllerBase extends Controller
 
     public function initialize()
     {
-
-        // set timezone
-        ini_set("date.timezone", $this->config->setting->timezone);
-
-
-        // record request
-        if ($this->config->setting->logs) {
-            if (!isset($_REQUEST['_url'])) {
-                $_REQUEST['_url'] = '/';
-            }
-            $_url = $_REQUEST['_url'];
-            unset($_REQUEST['_url']);
-            $log = empty($_REQUEST) ? $_url : ($_url . '?' . urldecode(http_build_query($_REQUEST)));
-            $logger = new FileLogger(BASE_DIR . '/running/logs/' . date('Ym'));
-            $logger->log($log, Logger::INFO);
-        }
-
     }
 
 

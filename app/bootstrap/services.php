@@ -33,10 +33,10 @@ $di->set('router', function () {
 }, true);
 
 
-$di->set('logger', function () {
-    $logger = new FileLogger(BASE_DIR . '/running/logs/' . date('Ymd'));
+$di->set('logger', function ($file = null) {
+    $logger = new FileLogger(BASE_DIR . '/running/logs/' . ($file ? $file : date('Ymd')));
     return $logger;
-}, true);
+}, false);
 
 
 $di->set('crypt', function () use ($di) {
@@ -104,15 +104,14 @@ $di->set('modelsCache', function () use ($di) {
             'index'  => $di['config']->redis->index
         ));
     }
-    return new BackFile($frontCache, array('prefix' => 'cache_', 'cacheDir' => APP_DIR . '/cache/'));
+    return new BackFile($frontCache, array('prefix' => 'cache_', 'cacheDir' => BASE_DIR . '/running/cache/'));
 }, true);
 
 
 $di['eventsManager']->attach('db', function ($event, $connection) use ($di) {
     if ($event->getType() == 'beforeQuery') {
         if ($di['config']->setting->logs) {
-            $logger = new FileLogger(APP_DIR . '/logs/SQL' . date('Ymd'));
-            $logger->log($connection->getSQLStatement());
+            $di->get('logger', ['SQL' . date('Ymd')])->log($connection->getSQLStatement());
         }
         if (preg_match('/drop|alter/i', $connection->getSQLStatement())) {
             return false;
