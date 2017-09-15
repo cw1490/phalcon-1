@@ -15,8 +15,8 @@ use Phalcon\DI\FactoryDefault,
     Phalcon\Crypt,
     Phalcon\Logger\Adapter\File as FileLogger,
     Phalcon\Cache\Frontend\Data as FrontData,
-    Phalcon\Cache\Backend\File as BackFile,
-    Phalcon\Cache\Backend\Redis as BackRedis,
+    Phalcon\Cache\Backend\File as FileCache,
+    Phalcon\Cache\Backend\Redis as RedisCache,
     MyApp\Plugins\SecurityPlugin;
 
 
@@ -79,32 +79,29 @@ $di->set('modelsMetadata', function () {
 $di->set('view', function () use ($di) {
     $view = new View();
     $view->setViewsDir(APP_DIR . '/views/');
-    $view->registerEngines(array(
+    $view->registerEngines([
         '.html'  => function ($view, $di) {
             $volt = new VoltEngine($view, $di);
-            $volt->setOptions(array(
-                'compiledPath'      => BASE_DIR . '/running/cache/',
-                'compiledSeparator' => '_'
-            ));
+            $volt->setOptions(['compiledPath' => BASE_DIR . '/running/cache/', 'compiledSeparator' => '.']);
             return $volt;
         },
         '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
-    ));
+    ]);
     return $view;
 }, true);
 
 
 $di->set('modelsCache', function () use ($di) {
-    $frontCache = new FrontData(array("lifetime" => $di['config']->setting->cacheTime));
+    $frontCache = new FrontData(["lifetime" => $di['config']->setting->cacheTime]);
     if (isset($di['config']->redis)) {
-        return new BackRedis($frontCache, array(
-            'prefix' => $di['config']->redis->prefix,
+        return new RedisCache($frontCache, [
             'host'   => $di['config']->redis->host,
             'port'   => $di['config']->redis->port,
-            'index'  => $di['config']->redis->index
-        ));
+            'index'  => $di['config']->redis->index,
+            'prefix' => 'cache_',
+        ]);
     }
-    return new BackFile($frontCache, array('prefix' => 'cache_', 'cacheDir' => BASE_DIR . '/running/cache/'));
+    return new FileCache($frontCache, ['cacheDir' => BASE_DIR . '/running/cache/', 'prefix' => 'cache_']);
 }, true);
 
 
@@ -120,16 +117,23 @@ $di['eventsManager']->attach('db', function ($event, $connection) use ($di) {
 });
 
 
+$di->set('redis', function () use ($di) {
+    $redis = new Redis();
+    $redis->connect($di['config']->redis->host, $di['config']->redis->port);
+    return $redis;
+}, true);
+
+
 foreach ($di['config']['database'] as $db => $value) {
     $di->set($db, function () use ($di, $value) {
-        $connection = new DbAdapter(array(
+        $connection = new DbAdapter([
             'host'     => $value['host'],
             'port'     => $value['port'],
             'username' => $value['user'],
             'password' => $value['pass'],
             'dbname'   => $value['db'],
             'charset'  => $value['charset']
-        ));
+        ]);
         $connection->setEventsManager($di['eventsManager']);
         return $connection;
     }, true);

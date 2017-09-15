@@ -12,7 +12,7 @@ namespace MyApp\Services;
 use Phalcon\Logger\AdapterInterface;
 use Phalcon\Logger\FormatterInterface;
 
-class CloudLogs implements AdapterInterface
+class Logs implements AdapterInterface
 {
 
     public function setFormatter(FormatterInterface $formatter)
