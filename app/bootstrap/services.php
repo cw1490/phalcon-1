@@ -18,8 +18,9 @@ use Phalcon\DI\FactoryDefault,
     Phalcon\Cache\Frontend\Data as FrontData,
     Phalcon\Cache\Backend\File as FileCache,
     Phalcon\Cache\Backend\Redis as RedisCache,
+    MyApp\Plugins\SecurityPlugin,
     Symfony\Component\Yaml\Yaml as SFYaml,
-    MyApp\Plugins\SecurityPlugin;
+    MongoDB\Client as MongoDBClient;
 
 
 $di = new FactoryDefault();
@@ -126,6 +127,11 @@ $di->set('redis', function () use ($di) {
     $redis = new Redis();
     $redis->connect($di['config']->redis->host, $di['config']->redis->port);
     return $redis;
+}, true);
+
+
+$di->set('mongodb', function () use ($di) {
+    return new MongoDBClient("mongodb://{$di['config']->mongodb->host}:{$di['config']->mongodb->port}");
 }, true);
 
 

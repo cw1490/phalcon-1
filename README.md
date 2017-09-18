@@ -1,10 +1,13 @@
 ## 说明
+基于高性能的开源框架Phalcon开发, 集成Composer组件, 集成Redis,Mongodb支持  
 [Phalcon相关文档](https://docs.phalconphp.com)
 
 
 ## 所需环境
 * PHP >= 5.5
 * composer
+* [redis](https://pecl.php.net/package/redis) - (可选)
+* [mongoDb](https://pecl.php.net/package/mongodb) - (可选)
 
 
 ## 使用方法
@@ -24,6 +27,7 @@
 [league/oauth2-client](https://github.com/thephpleague/oauth2-client) Auth2.0 Client  
 [mobiledetect/mobiledetectlib](https://packagist.org/packages/mobiledetect/mobiledetectlib) 设备识别  
 [alidayu](http://www.alidayu.com/) 短信功能  
+[mongodb](https://packagist.org/packages/mongodb/mongodb) MongoDB抽象层  
 
 
 ## 关于
