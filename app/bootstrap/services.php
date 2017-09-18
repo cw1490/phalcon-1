@@ -5,6 +5,8 @@ use Phalcon\DI\FactoryDefault,
     Phalcon\Mvc\View,
     Phalcon\Mvc\Dispatcher,
     Phalcon\Mvc\Url as UrlResolver,
+    Phalcon\Crypt,
+    Phalcon\Config,
     Phalcon\Config\Adapter\Yaml,
     Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter,
     Phalcon\Mvc\View\Engine\Volt as VoltEngine,
@@ -12,11 +14,11 @@ use Phalcon\DI\FactoryDefault,
     Phalcon\Session\Adapter\Files as SessionAdapter,
     Phalcon\Http\Response\Cookies,
     Phalcon\Events\Manager as EventsManager,
-    Phalcon\Crypt,
     Phalcon\Logger\Adapter\File as FileLogger,
     Phalcon\Cache\Frontend\Data as FrontData,
     Phalcon\Cache\Backend\File as FileCache,
     Phalcon\Cache\Backend\Redis as RedisCache,
+    Symfony\Component\Yaml\Yaml as SFYaml,
     MyApp\Plugins\SecurityPlugin;
 
 
@@ -24,7 +26,10 @@ $di = new FactoryDefault();
 
 
 $di->set('config', function () {
-    return new Yaml(APP_DIR . "/config/app.yml");
+    if (function_exists('yaml_parse_file')) {
+        return new Yaml(APP_DIR . "/config/app.yml");
+    }
+    return new Config(SFYaml::parse(file_get_contents(APP_DIR . "/config/app.yml")));
 }, true);
 
 

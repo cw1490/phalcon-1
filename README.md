@@ -4,7 +4,6 @@
 
 ## 所需环境
 * PHP >= 5.5
-* PHP Yaml 拓展
 * composer
 
 
