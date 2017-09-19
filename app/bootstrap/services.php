@@ -131,7 +131,11 @@ $di->set('redis', function () use ($di) {
 
 
 $di->set('mongodb', function () use ($di) {
-    return new MongoDBClient("mongodb://{$di['config']->mongodb->host}:{$di['config']->mongodb->port}");
+    return new MongoDBClient("mongodb://" . $di['config']->mongodb->host . ':' . $di['config']->mongodb->port, [
+        'username'   => $di['config']->mongodb->user,
+        'password'   => $di['config']->mongodb->pass,
+        'authSource' => $di['config']->mongodb->db
+    ]);
 }, true);
 
 
