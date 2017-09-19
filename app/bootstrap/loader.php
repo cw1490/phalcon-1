@@ -13,7 +13,7 @@ if (!file_exists(BASE_DIR . '/vendor/autoload.php')) {
     die('Run Command: composer install');
 }
 
-include_once BASE_DIR . '/vendor/autoload.php';
+include BASE_DIR . '/vendor/autoload.php';
 
 include APP_DIR . "/bootstrap/services.php";
 
