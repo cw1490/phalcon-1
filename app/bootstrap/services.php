@@ -9,7 +9,7 @@ use Phalcon\DI\FactoryDefault,
     Phalcon\Config,
     Phalcon\Config\Adapter\Yaml,
     Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter,
-    Phalcon\Mvc\View\Engine\Volt as VoltEngine,
+    Phalcon\Mvc\View\Engine\Volt,
     Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter,
     Phalcon\Session\Adapter\Files as SessionAdapter,
     Phalcon\Http\Response\Cookies,
@@ -87,8 +87,8 @@ $di->set('view', function () use ($di) {
     $view->setViewsDir(APP_DIR . '/views/');
     $view->registerEngines([
         '.html'  => function ($view, $di) {
-            $volt = new VoltEngine($view, $di);
-            $volt->setOptions(['compiledPath' => BASE_DIR . '/running/cache/', 'compiledSeparator' => '.']);
+            $volt = new Volt($view, $di);
+            $volt->setOptions(['compiledPath' => BASE_DIR . '/running/cache/']);
             return $volt;
         },
         '.phtml' => 'Phalcon\Mvc\View\Engine\Php'
@@ -101,10 +101,10 @@ $di->set('modelsCache', function () use ($di) {
     $frontCache = new FrontData(["lifetime" => $di['config']->setting->cacheTime]);
     if (isset($di['config']->redis)) {
         return new RedisCache($frontCache, [
-            'host'   => $di['config']->redis->host,
-            'port'   => $di['config']->redis->port,
-            'index'  => $di['config']->redis->index,
-            'prefix' => 'cache_',
+            'host'   => $di['config']->cache->host,
+            'port'   => $di['config']->cache->port,
+            'index'  => $di['config']->cache->db,
+            'prefix' => 'cache|',
         ]);
     }
     return new FileCache($frontCache, ['cacheDir' => BASE_DIR . '/running/cache/', 'prefix' => 'cache_']);
@@ -123,9 +123,18 @@ $di['eventsManager']->attach('db', function ($event, $connection) use ($di) {
 });
 
 
+$di->set('cache', function () use ($di) {
+    $redis = new Redis();
+    $redis->connect($di['config']->cache->host, $di['config']->cache->port);
+    $redis->select($di['config']->cache->db);
+    return $redis;
+}, true);
+
+
 $di->set('redis', function () use ($di) {
     $redis = new Redis();
     $redis->connect($di['config']->redis->host, $di['config']->redis->port);
+    $redis->select($di['config']->redis->db);
     return $redis;
 }, true);
 
